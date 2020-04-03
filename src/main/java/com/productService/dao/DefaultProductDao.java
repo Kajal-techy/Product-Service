@@ -9,5 +9,4 @@ import com.productService.model.Product;
 
 @Repository
 public interface DefaultProductDao extends MongoRepository<Product, Integer> {
-
-	}
+}
