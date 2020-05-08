@@ -1,0 +1,26 @@
+server:
+  port: 9092
+spring:
+  application:
+    name: product-Service
+
+  # Local mongodb configuration.
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: test
+
+hostname:
+  userservice: http://localhost:9098
+path:
+  getUserByUserName: /v1/users
+
+#Eureka Configuration
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    instanceId: ${spring.application.name}
+
