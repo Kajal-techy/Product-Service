@@ -19,6 +19,6 @@ public class ProductServiceExceptionHandler {
     @ExceptionHandler(value = DependencyFailureException.class)
     public ResponseEntity<DependencyFailureException> dependencyFailureException(DependencyFailureException exception) {
         log.info("Entering ProductServiceExceptionHandler.dependencyFailureException with parameter exception {}.", exception);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception);
+        return ResponseEntity.status(502).body(exception);
     }
 }
