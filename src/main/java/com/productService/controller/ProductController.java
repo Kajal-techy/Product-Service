@@ -1,10 +1,12 @@
 package com.productService.controller;
 
 import com.productService.exception.DependencyFailureException;
+import com.productService.exception.NotFoundException;
 import com.productService.model.Product;
 import com.productService.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +43,7 @@ class ProductController {
         log.info("Entering ProductController.createProduct with parameter product {} ", product);
         Optional<Product> productOptional = productService.createProduct(product);
         if (productOptional.isPresent())
-            return ResponseEntity.ok().body(productOptional.get());
+            return ResponseEntity.status(HttpStatus.CREATED).body(productOptional.get());
         else
             throw new DependencyFailureException("Failed to create a product");
     }
@@ -60,7 +62,7 @@ class ProductController {
         if (productOptional.isPresent())
             return ResponseEntity.ok().body(productOptional.get());
         else
-            throw new DependencyFailureException("Failed to find a product");
+            throw new NotFoundException("Failed to find a product");
     }
 
     /**

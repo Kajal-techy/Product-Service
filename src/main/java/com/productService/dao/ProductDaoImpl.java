@@ -22,8 +22,7 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public Optional<Product> save(Product product) {
         log.info("Entering ProductDaoImpl.save with parameter product {} ", product);
-        defaultProductDao.save(product);
-        return Optional.of(product);
+        return Optional.of(defaultProductDao.save(product));
     }
 
     @Override

@@ -4,7 +4,7 @@ spring:
   application:
     name: product-service
 
-# Local mongodb configuration.
+  # Local mongodb configuration.
   data:
     mongodb:
       host: localhost

@@ -18,7 +18,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     public List<User> getUserByUserName(String userName) throws DependencyFailureException {
-        log.info("Entering ProductDaoImpl.getUserByUserName with parameter userName {} ", userName);
+        log.info("Entering UserDaoImpl.getUserByUserName with parameter userName {} ", userName);
         try {
             return (userServiceProxy.getUserDetails(userName));
         } catch (Exception e) {
