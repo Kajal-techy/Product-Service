@@ -1,25 +1,22 @@
 package com.productService.service;
 
+import com.productService.exception.DependencyFailureException;
+import com.productService.model.Product;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.stereotype.Service;
-
-import com.productService.model.Product;
-
 @Service
 public interface ProductService {
-	
-	public void deleteProductbyId(int id);
 
-	public void updateProduct(Product prod);
+    void deleteProductById(String id);
 
-	public void deleteAllProducts();
+    Optional<Product> updateProduct(Product prod);
 
-	Optional<Product> findProductById(int id);
+    Optional<Product> findProductById(String id, boolean sellerDetail) throws DependencyFailureException;
 
-	void createProduct(Product product);
+    Optional<Product> createProduct(Product product);
 
-	List<Product> getAllProducts(Product product);
-
+    List<Product> getAllProducts();
 }

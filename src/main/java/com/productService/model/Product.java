@@ -1,13 +1,11 @@
 package com.productService.model;
 
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Data
 @Builder
@@ -15,13 +13,33 @@ import lombok.NonNull;
 @AllArgsConstructor
 @Document
 public class Product {
-	
-	@Id
-	int id;
 
-	@NonNull
-	String name;
+    @Id
+    String id;
 
-	@NonNull
-	String color;
+    @NotBlank
+    String name;
+
+    @NotBlank
+    String image;
+
+    @NotBlank
+    String price;
+
+    @NotBlank
+    String unit;
+
+    String description;
+
+    String rating;
+
+    List<String> reviews;
+
+    @NonNull
+    ProductStatus status;
+
+    @NonNull
+    List<PaymentMode> paymentmode;
+
+    User sellerDetails;
 }

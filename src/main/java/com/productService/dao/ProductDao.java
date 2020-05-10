@@ -1,22 +1,19 @@
 package com.productService.dao;
 
+import com.productService.model.Product;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.stereotype.Repository;
-
-import com.productService.model.Product;
-
 @Repository
 public interface ProductDao {
-	
-	public void save(Product product);
 
-	public Optional<Product> getProductById(int id);
+    Optional<Product> save(Product product);
 
-	public List<Product> getAllProducts();
+    Optional<Product> getProductById(String id);
 
-	public void deleteProductById(int id);
+    List<Product> getAllProducts();
 
-	public void deleteAllProducts();
+    void deleteProductById(String id);
 }

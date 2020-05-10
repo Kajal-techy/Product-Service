@@ -1,55 +1,94 @@
 package com.productService.service;
 
+import com.productService.dao.ProductDao;
+import com.productService.dao.UserDao;
+import com.productService.exception.DependencyFailureException;
+import com.productService.model.Product;
+import com.productService.model.User;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import com.productService.dao.ProductDao;
-import com.productService.model.Product;
-
+@Slf4j
 @Service
 class ProductServiceImpl implements ProductService {
-	
-	private ProductDao productDao;
 
-	@Autowired
-	public ProductServiceImpl(ProductDao productDao) {
-		this.productDao = productDao;
-	}
+    private final ProductDao productDao;
+    private final UserDao userDao;
 
-	@Override
-	public void createProduct(Product product) {
-		productDao.save(product);
-	}
+    @Autowired
+    public ProductServiceImpl(ProductDao productDao, UserDao userDao) {
+        this.productDao = productDao;
+        this.userDao = userDao;
+    }
 
-	@Override
-	public List<Product> getAllProducts(Product product) {
-		return null;
-		
-	}
+    /**
+     * This function is creating product
+     *
+     * @param product
+     */
+    @Override
+    public Optional<Product> createProduct(Product product) {
+        log.info("Entering ProductServiceImpl.createProduct");
+        return productDao.save(product);
+    }
 
-	@Override
-	public Optional<Product> findProductById(int id) {
-		return productDao.getProductById(id);
-	}
+    /**
+     * This function is fetching all products
+     *
+     * @return
+     */
+    @Override
+    public List<Product> getAllProducts() {
+        log.info("Entering ProductServiceImpl.getAllProducts");
+        return productDao.getAllProducts();
+    }
 
-	@Override
-	public void deleteProductbyId(int id) {
-		productDao.deleteProductById(id);
-	}
+    /**
+     * This function is fetching product by Id
+     *
+     * @param id
+     * @param sellerDetail
+     * @return
+     */
+    @Override
+    public Optional<Product> findProductById(String id, boolean sellerDetail) throws DependencyFailureException {
+        log.info("Entering ProductServiceImpl.findProductById with parameters id {} and sellerDetail {}", id, sellerDetail);
+        Optional<Product> productOptional = productDao.getProductById(id);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            List<User> user;
+            if (product.getSellerDetails() != null && sellerDetail) {
+                user = userDao.getUserByUserName(product.getSellerDetails().getUserName());
+                product.setSellerDetails(user.get(0));
+            }
+            return Optional.of(product);
+        } else
+            return Optional.empty();
+    }
 
-	@Override
-	public void updateProduct(Product product) {
-		productDao.save(product);
-	}
+    /**
+     * This Function is deleting product by Id
+     *
+     * @param id
+     */
+    @Override
+    public void deleteProductById(String id) {
+        log.info("Entering ProductServiceImpl.deleteProductbyId");
+        productDao.deleteProductById(id);
+    }
 
-	@Override
-	public void deleteAllProducts() {
-		// TODO Auto-generated method stub
-		
-	}
-
-} 
+    /**
+     * This function will update product
+     *
+     * @param product
+     */
+    @Override
+    public Optional<Product> updateProduct(Product product) {
+        log.info("Entering ProductServiceImpl.updateProduct");
+        return productDao.save(product);
+    }
+}
