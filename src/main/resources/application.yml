@@ -2,19 +2,14 @@ server:
   port: 9092
 spring:
   application:
-    name: product-Service
+    name: product-service
 
-  # Local mongodb configuration.
+# Local mongodb configuration.
   data:
     mongodb:
       host: localhost
       port: 27017
       database: test
-
-hostname:
-  userservice: http://localhost:9098
-path:
-  getUserByUserName: /v1/users
 
 #Eureka Configuration
 eureka:

@@ -5,7 +5,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Data
@@ -18,16 +17,16 @@ public class Product {
     @Id
     String id;
 
-    @NonNull @NotBlank
+    @NotBlank
     String name;
 
-    @NonNull @NotBlank
+    @NotBlank
     String image;
 
-    @NonNull @NotBlank
+    @NotBlank
     String price;
 
-    @NonNull @NotBlank
+    @NotBlank
     String unit;
 
     String description;

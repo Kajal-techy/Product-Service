@@ -1,11 +1,8 @@
 package com.productService.dao;
 
-import com.productService.exception.NotFoundException;
 import com.productService.model.Product;
-import com.productService.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,24 +14,16 @@ public class ProductDaoImpl implements ProductDao {
 
     private final DefaultProductDao defaultProductDao;
 
-    private final UserServiceProxy userServiceProxy;
-
-    @Value("${hostname.userservice}")
-    private String hostname;
-
-    @Value("${path.getUserByUserName}")
-    private String path;
-
     @Autowired
-    public ProductDaoImpl(DefaultProductDao defaultProductDao, UserServiceProxy userServiceProxy) {
+    public ProductDaoImpl(DefaultProductDao defaultProductDao) {
         this.defaultProductDao = defaultProductDao;
-        this.userServiceProxy = userServiceProxy;
     }
 
     @Override
-    public void save(Product product) {
+    public Optional<Product> save(Product product) {
         log.info("Entering ProductDaoImpl.save with parameter product {} ", product);
         defaultProductDao.save(product);
+        return Optional.of(product);
     }
 
     @Override
@@ -47,22 +36,6 @@ public class ProductDaoImpl implements ProductDao {
     public void deleteProductById(String id) {
         log.info("Entering ProductDaoImpl.deleteProductById with parameter id {} ", id);
         defaultProductDao.deleteById(id);
-    }
-
-    @Override
-    public void deleteAllProducts() {
-        log.info("Entering ProductDaoImpl.deleteAllProducts");
-        defaultProductDao.deleteAll();
-    }
-
-    @Override
-    public User[] getUserByUserName(String userName) {
-        log.info("Entering ProductDaoImpl.getUserByUserName with parameter userName {} ", userName);
-        try {
-            return userServiceProxy.getUserDetails(userName);
-        } catch (Exception e) {
-            throw new NotFoundException("Internal Server Error : Exception = " + e.toString());
-        }
     }
 
     @Override

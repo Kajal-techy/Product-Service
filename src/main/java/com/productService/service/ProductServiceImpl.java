@@ -1,7 +1,8 @@
 package com.productService.service;
 
 import com.productService.dao.ProductDao;
-import com.productService.exception.NotFoundException;
+import com.productService.dao.UserDao;
+import com.productService.exception.DependencyFailureException;
 import com.productService.model.Product;
 import com.productService.model.User;
 import lombok.extern.slf4j.Slf4j;
@@ -16,76 +17,78 @@ import java.util.Optional;
 class ProductServiceImpl implements ProductService {
 
     private final ProductDao productDao;
+    private final UserDao userDao;
 
     @Autowired
-    public ProductServiceImpl(ProductDao productDao) {
+    public ProductServiceImpl(ProductDao productDao, UserDao userDao) {
         this.productDao = productDao;
+        this.userDao = userDao;
     }
 
     /**
      * This function is creating product
+     *
      * @param product
      */
     @Override
-    public void createProduct(Product product) {
+    public Optional<Product> createProduct(Product product) {
         log.info("Entering ProductServiceImpl.createProduct");
-        productDao.save(product);
+        return productDao.save(product);
     }
 
     /**
-     *  This function is fetching all products
+     * This function is fetching all products
+     *
      * @return
      */
     @Override
     public List<Product> getAllProducts() {
         log.info("Entering ProductServiceImpl.getAllProducts");
         return productDao.getAllProducts();
-
     }
 
     /**
      * This function is fetching product by Id
+     *
      * @param id
      * @param sellerDetail
      * @return
      */
     @Override
-    public Optional<Product> findProductById(String id, boolean sellerDetail) {
+    public Optional<Product> findProductById(String id, boolean sellerDetail) throws DependencyFailureException {
         log.info("Entering ProductServiceImpl.findProductById with parameters id {} and sellerDetail {}", id, sellerDetail);
-        if (productDao.getProductById(id).isPresent()) {
-            Product product = productDao.getProductById(id).get();
-            User[] user;
-            if (sellerDetail) {
-                user = productDao.getUserByUserName(product.getSellerDetails().getUserName());
-                product.setSellerDetails(user[0]);
+        Optional<Product> productOptional = productDao.getProductById(id);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            List<User> user;
+            if (product.getSellerDetails() != null && sellerDetail) {
+                user = userDao.getUserByUserName(product.getSellerDetails().getUserName());
+                product.setSellerDetails(user.get(0));
             }
             return Optional.of(product);
         } else
-            throw new NotFoundException("Product with Id : " + id + "Not found");
+            return Optional.empty();
     }
 
     /**
      * This Function is deleting product by Id
+     *
      * @param id
      */
     @Override
-    public void deleteProductbyId(String id) {
+    public void deleteProductById(String id) {
         log.info("Entering ProductServiceImpl.deleteProductbyId");
         productDao.deleteProductById(id);
     }
 
     /**
      * This function will update product
+     *
      * @param product
      */
     @Override
-    public void updateProduct(Product product) {
+    public Optional<Product> updateProduct(Product product) {
         log.info("Entering ProductServiceImpl.updateProduct");
-        productDao.save(product);
-    }
-
-    @Override
-    public void deleteAllProducts() {
-        // TODO Auto-generated method stub
+        return productDao.save(product);
     }
 }
