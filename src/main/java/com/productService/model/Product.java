@@ -35,7 +35,6 @@ public class Product {
 
     List<String> reviews;
 
-    @NonNull
     ProductStatus status;
 
     @NonNull

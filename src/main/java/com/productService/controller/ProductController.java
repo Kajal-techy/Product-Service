@@ -17,7 +17,7 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:4850"})
 class ProductController {
 
     private final ProductService productService;
